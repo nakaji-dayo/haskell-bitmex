@@ -38,9 +38,9 @@ library
                      , aeson >=1.0 && <2.0
                      , bytestring >=0.10.0 && <0.11
                      , bytestring-conversion >= 0.3
-                     , capability >=0.1 && <0.2
+                     , capability >=0.1 && <0.3
                      , cryptonite >= 0.25
-                     , http-client >=0.5 && <0.6
+                     , http-client >=0.5 && <0.7
                      , http-client-tls >= 0.3
                      , http-types >= 0.10
                      , katip >= 0.5
@@ -87,10 +87,10 @@ executable example
                      , mtl >=2.2.1
                      , aeson >=1.0 && <2.0
                      , bytestring >=0.10.0 && <0.11
-                     , capability >=0.1 && <0.2
+                     , capability >=0.1 && <0.3
                      , haskell-bitmex-rest
                      , haskell-bitmex-client
-                     , http-client >=0.5 && <0.6
+                     , http-client >=0.5 && <0.7
                      , http-client-tls >= 0.3
                      , katip >= 0.5
                      , text >=0.11 && <1.3
