@@ -8,6 +8,7 @@ module BitMEXClient.WebSockets.Types.General
     ) where
 
 import           BitMEXClient.CustomPrelude
+import           Prelude                    (Ord)
 
 data Side
     = Buy
@@ -54,6 +55,10 @@ data Currency
     | XTZ
     | ZEC
     | Total
+    -- add
+    | KRW
+    | TRX
+    | JPY
     deriving (Eq, Show, Generic)
 
 instance ToJSON Currency
@@ -62,15 +67,21 @@ instance FromJSON Currency
 
 data Symbol
     = XBTUSD
-    | XBTM18
-    | XBTU18
-    | XBT7D_U110
-    | ADAM18
-    | BCHM18
-    | ETHM18
-    | LTCM18
-    | XRPM18
-    deriving (Eq, Show, Generic)
+    | XBT7D_U105
+    | XBTJPY
+    | ADAZ19
+    | BCHZ19
+    | EOSZ19
+    | ETHXBT
+    | LTCZ19
+    | TRXZ19
+    | XRPZ19
+    | XBTKRW
+    | ETHUSD -- ?
+    | XBTZ19
+    | ETHZ19
+    | XBTH20
+    deriving (Eq, Show, Ord, Generic)
 
 instance ToJSON Symbol
 

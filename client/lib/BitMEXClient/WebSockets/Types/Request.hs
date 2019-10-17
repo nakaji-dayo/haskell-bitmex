@@ -41,7 +41,9 @@ data Topic a
     | Instrument
     | Insurance
     | Liquidation
+    | OrderBookL2All
     | OrderBookL2 Symbol
+    | OrderBookL2_25 Symbol
     | OrderBook10 Symbol
     | PublicNotifications
     | Quote Symbol
@@ -66,8 +68,12 @@ data Topic a
     deriving (Eq, Show, Generic)
 
 instance (ToJSON a) => ToJSON (Topic a) where
+    toJSON OrderBookL2All =
+        String "orderBookL2"
     toJSON (OrderBookL2 v) =
         String (T.append "orderBookL2:" ((T.pack . show) v))
+    toJSON (OrderBookL2_25 v) =
+        String (T.append "orderBookL2_25:" ((T.pack . show) v))
     toJSON (OrderBook10 v) =
         String (T.append "orderBook10:" ((T.pack . show) v))
     toJSON (QuoteBin1m v) =

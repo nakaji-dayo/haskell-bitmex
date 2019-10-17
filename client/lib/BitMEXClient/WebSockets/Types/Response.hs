@@ -27,12 +27,22 @@ module BitMEXClient.WebSockets.Types.Response
     , Action(..)
     ) where
 
-import           BitMEX.Core         (DateTime)
-import           Data.Text           (Text)
-import           Data.Vector         (Vector)
+import           BitMEX.Core
+    ( DateTime
+    )
+import           Data.Text
+    ( Text
+    )
+import           Data.Vector
+    ( Vector
+    )
 
-import           Data.HashMap.Strict (insert)
-import           Data.Aeson          ((.:?))
+import           Data.Aeson
+    ( (.:?)
+    )
+import           Data.HashMap.Strict
+    ( insert
+    )
 
 import           BitMEXClient.CustomPrelude
 import           BitMEXClient.WebSockets.Types.General
@@ -473,6 +483,16 @@ data RespOrderBookL2 = RespOrderBookL2
 
 instance FromJSON RespOrderBookL2
 
+data RespOrderBookL2_25 = RespOrderBookL2_25
+    { symbol :: !Symbol -- ^ /Required/ "symbol"
+    , id     :: !Double -- ^ /Required/ "id"
+    , side   :: !Side -- ^ /Required/ "side"
+    , size   :: !(Maybe Double) -- ^ "size"
+    , price  :: !(Maybe Double) -- ^ "price"
+    } deriving (Show, Eq, Generic)
+
+instance FromJSON RespOrderBookL2_25
+
 data RespOrderBook10 = RespOrderBook10
     { symbol    :: !Symbol
     , timestamp :: !Text
@@ -678,6 +698,7 @@ data Response
     | N (TABLE RespNotification)
     | O (TABLE RespOrder)
     | OB (TABLE RespOrderBookL2)
+    | OB25 (TABLE RespOrderBookL2_25)
     | OB10 (TABLE RespOrderBook10)
     | P (TABLE RespPosition)
     | Q (TABLE RespQuote)
@@ -724,6 +745,8 @@ instance FromJSON Response where
                     O <$> genericParseJSON opts (Object o)
                 Just "orderBookL2" ->
                     OB <$> genericParseJSON opts (Object o)
+                Just "orderBookL2_25" ->
+                    OB25 <$> genericParseJSON opts (Object o)
                 Just "orderBook10" ->
                     OB10 <$>
                     genericParseJSON opts (Object o)

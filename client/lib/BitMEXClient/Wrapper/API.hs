@@ -10,33 +10,37 @@ module BitMEXClient.Wrapper.API
     ) where
 
 import           BitMEX
-    ( BitMEXConfig (..)
+    ( AuthApiKeyApiKey (..)
+    , AuthBitMEXApiMAC (..)
+    , BitMEXConfig (..)
     , BitMEXRequest (..)
+    , MimeError (..)
+    , MimeFormUrlEncoded
     , MimeResult
+    , MimeResult (..)
     , MimeType
     , MimeUnrender
     , ParamBody (..)
     , Produces
+    , addAuthMethod
     , dispatchMime
     , paramsBodyL
     , paramsQueryL
     , setHeader
-    , addAuthMethod
-    , AuthApiKeyApiKey(..)
-    , AuthBitMEXApiMAC(..)
-    , MimeFormUrlEncoded
-    , MimeResult(..)
-    , MimeError(..)
     )
-import qualified Network.HTTP.Client as NH (Response(..))
-import qualified Network.HTTP.Types  as NH (Status(..))
-import           Data.Either (Either(..))
-import           Control.Concurrent (threadDelay)
+import           Control.Concurrent            (threadDelay)
 import           Control.Monad
+import           Data.Either                   (Either (..))
+import qualified Network.HTTP.Client           as NH
+    ( Response (..)
+    )
+import qualified Network.HTTP.Types            as NH
+    ( Status (..)
+    )
 
 -- FIX ME!!! Too many little things to import here. Having to import GHC.Num to have (+) work broke the camels back.
 -- We should ditch CustomPrelude until it is polished enough.
-import Prelude
+import           Prelude
 
 import           BitMEX.Logging
 import           BitMEXClient.CustomPrelude
@@ -65,16 +69,19 @@ import qualified Data.ByteString.Lazy.Char8    as LBC
     ( pack
     , unpack
     )
+import qualified Data.Text                     as T (pack)
 import qualified Data.Text.Lazy                as LT
-    ( toStrict
-    )
-import qualified Data.Text                     as T
     ( pack
+    , toStrict
     )
 import qualified Data.Text.Lazy.Encoding       as LT
     ( decodeUtf8
     )
 import           Data.Vector                   (fromList)
+
+import           Data.Aeson
+    ( eitherDecode
+    )
 
 ------------------------------------------------------------
 -- REST
@@ -209,11 +216,11 @@ getMessage ::
 getMessage conn config = do
     msg <- receiveData conn
     runConfigLogWithExceptions "WebSocket" config $ do
-        case (decode msg :: Maybe Response) of
-            Nothing -> do
-                errorLog msg
+        case (eitherDecode msg :: Either String Response) of
+            Left e -> do
+                errorLog $ LBC.pack e <> ": " <> msg
                 return Nothing
-            Just r -> do
+            Right r -> do
                 case r of
                     P _ -> do
                         log' "Positions" msg
@@ -275,9 +282,10 @@ generateAuthInfo BitMEX{..} config =
 dispatchRequest ::
       ( Produces req accept
       , MimeUnrender accept res
+      , MimeType ct
       , MonadIO m
       )
-   => BitMEX -> BitMEXRequest req MimeFormUrlEncoded res accept
+   => BitMEX -> BitMEXRequest req ct res accept
    -> m (MimeResult res)
 dispatchRequest config req@BitMEXRequest{..} = do
     time <- liftIO $ makeTimestamp <$> getPOSIXTime
