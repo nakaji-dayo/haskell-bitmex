@@ -81,6 +81,7 @@ data Symbol
     | XBTZ19
     | ETHZ19
     | XBTH20
+    | XBT7D_D95
     deriving (Eq, Show, Ord, Generic)
 
 instance ToJSON Symbol
