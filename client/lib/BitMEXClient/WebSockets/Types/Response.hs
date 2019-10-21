@@ -483,15 +483,15 @@ data RespOrderBookL2 = RespOrderBookL2
 
 instance FromJSON RespOrderBookL2
 
-data RespOrderBookL2_25 = RespOrderBookL2_25
-    { symbol :: !Symbol -- ^ /Required/ "symbol"
-    , id     :: !Double -- ^ /Required/ "id"
-    , side   :: !Side -- ^ /Required/ "side"
-    , size   :: !(Maybe Double) -- ^ "size"
-    , price  :: !(Maybe Double) -- ^ "price"
-    } deriving (Show, Eq, Generic)
+-- data RespOrderBookL2_25 = RespOrderBookL2_25
+--     { symbol :: !Symbol -- ^ /Required/ "symbol"
+--     , id     :: !Double -- ^ /Required/ "id"
+--     , side   :: !Side -- ^ /Required/ "side"
+--     , size   :: !(Maybe Double) -- ^ "size"
+--     , price  :: !(Maybe Double) -- ^ "price"
+--     } deriving (Show, Eq, Generic)
 
-instance FromJSON RespOrderBookL2_25
+-- instance FromJSON RespOrderBookL2_25
 
 data RespOrderBook10 = RespOrderBook10
     { symbol    :: !Symbol
@@ -698,7 +698,7 @@ data Response
     | N (TABLE RespNotification)
     | O (TABLE RespOrder)
     | OB (TABLE RespOrderBookL2)
-    | OB25 (TABLE RespOrderBookL2_25)
+    | OB25 (TABLE RespOrderBookL2)
     | OB10 (TABLE RespOrderBook10)
     | P (TABLE RespPosition)
     | Q (TABLE RespQuote)
