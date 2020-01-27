@@ -80,8 +80,16 @@ data Symbol
     | ETHUSD -- ?
     | XBTZ19
     | ETHZ19
-    | XBTH20
     | XBT7D_D95
+    | ADAH20
+    | BCHH20
+    | EOSH20
+    | LTCH20
+    | TRXH20
+    | XRPH20
+    | XBTH20
+    | ETHH20
+    | XBTM20
     deriving (Eq, Show, Ord, Generic)
 
 instance ToJSON Symbol
